@@ -27,7 +27,7 @@ async def client_matplotlib():
         Sawyer=await RRN.AsyncConnectService('rr+ws://128.113.224.57:8884/?service=Sawyer',uname,credentials,None,None)
         UR=await RRN.AsyncConnectService('rr+ws://128.113.224.57:2355/?service=Universal_Robot',uname,credentials,None,None)
 
-        await inst.async_update(None)        
+        # await inst.async_update(None)        
         print_div("Running!")
 
         global fig
@@ -243,7 +243,7 @@ pose_Sawyer=0
 
 async def animate(i, Sawyer, UR, inst):
     global pose_Sawyer, q_UR, q_Sawyer
-    #await inst.async_update(None)
+    await inst.async_update(None)
     xs = []
     ys = []
 
