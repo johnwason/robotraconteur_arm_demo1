@@ -279,7 +279,7 @@ async def animate(i, Sawyer, UR, inst):
     r'$q5=%.2f$' % (q_UR[4], ),
     r'$q6=%.2f$' % (q_UR[5], )))
 
-    ax.text(0.05, 0.95, text_UR, transform=ax.transAxes, fontsize=14,
+    ax.text(0.75, 0.95, text_UR, transform=ax.transAxes, fontsize=14,
             verticalalignment='top', bbox=props)
     text_Sawyer = '\n'.join((
     r'$q1=%.2f$' % (q_Sawyer[0], ),
@@ -292,7 +292,19 @@ async def animate(i, Sawyer, UR, inst):
 
 
     # place a text box in upper left in axes coords
-    ax.text(0.7, 0.5, text_Sawyer, transform=ax.transAxes, fontsize=14,
+    ax.text(0.02, 0.5, text_Sawyer, transform=ax.transAxes, fontsize=14,
             bbox=props)
+
+    text_Sawyer_end = '\n'.join((
+    r'$x=%.2f$' % (pose_Sawyer_C[0], ),
+    r'$y=%.2f$' % (pose_Sawyer_C[1], )))
+    ax.text(0.28, 0.7, text_Sawyer_end, transform=ax.transAxes, fontsize=14,
+            bbox=props)
+    text_UR_end = '\n'.join((
+    r'$x=%.2f$' % (pose_UR_C[0], ),
+    r'$y=%.2f$' % (pose_UR_C[1], )))
+    ax.text(0.515, 0.7, text_UR_end, transform=ax.transAxes, fontsize=14,
+            bbox=props)
+
 
 RR.WebLoop.run(client_matplotlib())
