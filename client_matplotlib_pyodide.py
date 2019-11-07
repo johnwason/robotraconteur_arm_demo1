@@ -20,7 +20,6 @@ p5=np.array([[0],[0],[-0.09465]])
 p6=np.array([[0],[-0.0823],[0]])
 P=np.concatenate((p0,p1,p2,p3,p4,p5,p6),axis=1)
 joint_type=np.zeros(6)
-UR_def=Robot(H,P,joint_type)
 
 
 def H_inv(H):							#inverse the homogeneous transformation matrix
@@ -92,7 +91,7 @@ async def animate(i, Sawyer, UR, inst):
 	ax.plot(xs, ys,'ro')
 	pose_Sawyer_C=np.dot(H_S_C,np.array([[pose_Sawyer[0]['position']['x']],[pose_Sawyer[0]['position']['y']],[1]]))
 	ax.plot(pose_Sawyer_C[0],pose_Sawyer_C[1],'ro',color='blue')
-	pose_UR_C=np.dot(H_UR_C,np.array([[pose_UR[0]['position']['x']],[pose_UR[0]['position']['y']],[1]]))
+	pose_UR_C=np.dot(H_UR_C,np.array([[pose_UR[0]['position']['x']],[pose_Sawyer[0]['position']['y']],[1]]))
 	ax.plot(pose_UR_C[0],pose_UR_C[1],'ro',color='blue')
 	ax.set(xlim=(0, 1.7), ylim=(-1, 2))
 	props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
