@@ -138,7 +138,6 @@ current_frame=np.zeros((100,100,3))
 
 def new_frame(pipe_ep):
 	global current_frame
-	print(current_frame)
 	#Loop to get the newest frame
 	while (pipe_ep.Available > 0):
 		#Receive the packet
@@ -149,6 +148,7 @@ def new_frame(pipe_ep):
 async def animate2(i, c_host,ax1):
 
 	c=c_host.async_get_Webcams(0,None)
+	print(c)
 
 	#Connect the pipe FrameStream to get the PipeEndpoint p
 	p=c.AsyncFrameStream.Connect(-1)
