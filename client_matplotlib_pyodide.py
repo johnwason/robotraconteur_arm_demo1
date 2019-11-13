@@ -41,7 +41,7 @@ async def client_matplotlib():
 		inst=await RRN.AsyncConnectService('rr+ws://128.113.224.57:52222/?service=SmartCam',uname,credentials,None,None)
 		Sawyer=await RRN.AsyncConnectService('rr+ws://128.113.224.57:8884/?service=Sawyer',uname,credentials,None,None)
 		UR=await RRN.AsyncConnectService('rr+ws://128.113.224.57:2355/?service=Universal_Robot',uname,credentials,None,None)
-		c_host=RRN.ConnectService('rr+tcp://localhost:2366?service=Webcam')
+		c_host=await RRN.AsyncConnectService('rr+tcp://localhost:2366?service=Webcam')
 
 		print_div("Running!")
 
@@ -162,6 +162,6 @@ async def animate2(i, c_host,ax1):
 	im1 = ax1.imshow(current_frame)	
 	im1.set_data(current_frame)
 
-			
+
 
 RR.WebLoop.run(client_matplotlib())
