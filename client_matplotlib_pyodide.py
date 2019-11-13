@@ -41,17 +41,15 @@ async def client_matplotlib():
 		inst=await RRN.AsyncConnectService('rr+ws://128.113.224.57:52222/?service=SmartCam',uname,credentials,None,None)
 		Sawyer=await RRN.AsyncConnectService('rr+ws://128.113.224.57:8884/?service=Sawyer',uname,credentials,None,None)
 		UR=await RRN.AsyncConnectService('rr+ws://128.113.224.57:2355/?service=Universal_Robot',uname,credentials,None,None)
+		c_host=RRN.ConnectService('rr+tcp://localhost:2366?service=Webcam')
 
-		await inst.async_update(None)        
 		print_div("Running!")
 
-		global fig
-		global ax
-		fig = plt.figure()
+		fig, (ax, ax1) = plt.subplots(2)
 		fig.show()
-		ax = fig.add_subplot(1, 1, 1)
+
 		while True:
-			await animate(0,Sawyer,UR,inst)
+			await animate(0,Sawyer,UR,inst,ax)
 			await RRN.AsyncSleep(0.01,None)
 
 	except:
@@ -66,7 +64,7 @@ H_S_C=H_inv(H_Sawyer)
 H_UR_C=H_inv(H_UR)
 
 
-async def animate(i, Sawyer, UR, inst):
+async def animate(i, Sawyer, UR, inst,ax):
 
 	xs = []
 	ys = []
@@ -93,7 +91,7 @@ async def animate(i, Sawyer, UR, inst):
 	ax.plot(pose_Sawyer_C[0],pose_Sawyer_C[1],'ro',color='blue')
 	pose_UR_C=np.dot(H_UR_C,np.array([[pose_UR[0]['position']['x']],[pose_UR[0]['position']['y']],[1]]))
 	ax.plot(pose_UR_C[0],pose_UR_C[1],'ro',color='blue')
-	ax.set(xlim=(0, 1.7), ylim=(-1, 2))
+	ax.set(xlim=(-1, 2), ylim=(-1, 2))
 	props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 
 	text_UR = '\n'.join((
@@ -117,7 +115,7 @@ async def animate(i, Sawyer, UR, inst):
 
 
 	# place a text box in upper left in axes coords
-	ax.text(0.02, 0.5, text_Sawyer, transform=ax.transAxes, fontsize=14,
+	ax.text(0.02, 0.1, text_Sawyer, transform=ax.transAxes, fontsize=14,
 			bbox=props)
 
 	text_Sawyer_end = '\n'.join((
@@ -131,5 +129,39 @@ async def animate(i, Sawyer, UR, inst):
 	ax.text(0.515, 0.7, text_UR_end, transform=ax.transAxes, fontsize=14,
 			bbox=props)
 
+def WebcamImageToMat(image):
+	frame2=image.data.reshape([image.height, image.width, 3], order='C')
+	return frame2
+
+current_frame=np.zeros((100,100,3))
+
+def new_frame(pipe_ep):
+	global current_frame
+	print(current_frame)
+	#Loop to get the newest frame
+	while (pipe_ep.Available > 0):
+		#Receive the packet
+		image=pipe_ep.ReceivePacket()
+		#Convert the packet to an image and set the global variable
+		current_frame=WebcamImageToMat(image)
+
+async def animate2(i, c_host,ax1):
+
+	c=c_host.get_Webcams(0)
+
+	#Connect the pipe FrameStream to get the PipeEndpoint p
+	p=c.FrameStream.Connect(-1)
+
+	#Set the callback for when a new pipe packet is received to the
+	#new_frame function
+	p.PacketReceivedEvent+=new_frame
+	try:
+		c.StartStreaming()
+	except: pass
+
+	im1 = ax1.imshow(current_frame)	
+	im1.set_data(current_frame)
+
+			
 
 RR.WebLoop.run(client_matplotlib())
