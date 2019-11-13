@@ -50,6 +50,7 @@ async def client_matplotlib():
 
 		while True:
 			await animate(0,Sawyer,UR,inst,ax)
+			await animate2(0,c_host,ax1)
 			await RRN.AsyncSleep(0.01,None)
 
 	except:
