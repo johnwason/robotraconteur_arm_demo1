@@ -41,7 +41,7 @@ async def client_matplotlib():
 		inst=await RRN.AsyncConnectService('rr+ws://128.113.224.57:52222/?service=SmartCam',uname,credentials,None,None)
 		Sawyer=await RRN.AsyncConnectService('rr+ws://128.113.224.57:8884/?service=Sawyer',uname,credentials,None,None)
 		UR=await RRN.AsyncConnectService('rr+ws://128.113.224.57:2355/?service=Universal_Robot',uname,credentials,None,None)
-		c_host=await RRN.AsyncConnectService('rr+tcp://localhost:2366?service=Webcam')
+		c_host=await RRN.AsyncConnectService('rr+tcp://localhost:2366?service=Webcam',uname,credentials,None,None)
 
 		print_div("Running!")
 
