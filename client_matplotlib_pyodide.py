@@ -50,7 +50,7 @@ async def client_matplotlib():
 
 		while True:
 			await animate(0,Sawyer,UR,inst,ax)
-			await animate2(0,c_host,ax1)
+			await animate2(0,c_host,ax)
 			await RRN.AsyncSleep(0.01,None)
 
 	except:
@@ -148,7 +148,7 @@ def new_frame(pipe_ep):
 
 async def animate2(i, c_host,ax1):
 
-	c=c_host.get_Webcams(0)
+	c=c_host.async_get_Webcams(0)
 
 	#Connect the pipe FrameStream to get the PipeEndpoint p
 	p=c.FrameStream.Connect(-1)
