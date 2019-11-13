@@ -147,11 +147,11 @@ def new_frame(pipe_ep):
 
 async def animate2(i, c_host,ax1):
 
-	c=c_host.async_get_Webcams(0,None)
+	c= await c_host.async_get_Webcams(0,None)
 	print(c)
 
 	#Connect the pipe FrameStream to get the PipeEndpoint p
-	p=c.AsyncFrameStream.Connect(-1)
+	p=c.FrameStream.Connect(-1)
 
 	#Set the callback for when a new pipe packet is received to the
 	#new_frame function
