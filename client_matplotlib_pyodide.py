@@ -148,7 +148,7 @@ def new_frame(pipe_ep):
 
 async def animate2(i, c_host,ax1):
 
-	c=c_host.async_get_Webcams(0)
+	c=c_host.async_get_Webcams(None,0)
 
 	#Connect the pipe FrameStream to get the PipeEndpoint p
 	p=c.FrameStream.Connect(-1)
