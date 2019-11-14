@@ -151,11 +151,11 @@ async def animate2(i, c_host,ax1):
 	print(c)
 
 	#Connect the pipe FrameStream to get the PipeEndpoint p
-	p= c.FrameStream.AsyncConnect(-1,None)
+	p= await c.FrameStream.AsyncConnect(-1,None)
 
 	#Set the callback for when a new pipe packet is received to the
 	#new_frame function
-	await p.PacketReceivedEvent+=new_frame
+	p.PacketReceivedEvent+=new_frame
 	try:
 		c.StartStreaming()
 	except: pass
