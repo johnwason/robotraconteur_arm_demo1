@@ -152,13 +152,13 @@ def ShowFrame(image):
 	if (imageData == null):
 	
 		imageData = ctx.createImageData(image.width, image.height)
-		imageBytes = imageData.Data
+		imageBytes = imageData.data
 	
 
 	if (imageData.Width != image.width) or (imageData.Height != image.height):
 	
 		imageData = ctx.createImageData(image.width, image.height)
-		imageBytes = imageData.Data
+		imageBytes = imageData.data
 	
 
 	for y in range(image.height):
