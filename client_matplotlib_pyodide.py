@@ -46,7 +46,7 @@ async def client_matplotlib():
 
 		print_div("Running!")
 
-		fig, (ax, ax1) = plt.subplots(2)
+		fig, ax = plt.subplots()
 		fig.show()
 
 		while True:
@@ -194,23 +194,6 @@ def new_frame(pipe_ep):
 		#Convert the packet to an image and set the global variable
 		current_frame=WebcamImageToMat(image)
 		ShowFrame(current_frame)
-
-async def animate2(i, c_host,ax1):
-
-	c= await c_host.async_get_Webcams(0,None)
-
-	#Connect the pipe FrameStream to get the PipeEndpoint p
-	p= await c.FrameStream.AsyncConnect(-1,None)
-
-	#Set the callback for when a new pipe packet is received to the
-	#new_frame function
-	p.PacketReceivedEvent+=new_frame
-	try:
-		c.StartStreaming()
-	except: pass
-
-	im1 = ax1.imshow(current_frame)	
-	im1.set_data(current_frame)
 
 
 
