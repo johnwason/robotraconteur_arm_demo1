@@ -4,8 +4,7 @@ from RobotRaconteur.Client import *
 from matplotlib import pyplot as plt
 import numpy as np
 import math
-import warnings
-
+from js import document
 
 ex=np.array([[1],[0],[0]])
 ey=np.array([[0],[1],[0]])
@@ -35,13 +34,14 @@ async def client_matplotlib():
 	uname=document.getElementById("uname").value
 	psw=document.getElementById("psw").value
 
-	credentials={"password":RR.RobotRaconteurVarValue(psw,"string")}
+	credentials="password":RR.RobotRaconteurVarValue(psw,"string")
 
 	try:
 		inst=await RRN.AsyncConnectService('rr+ws://128.113.224.57:52222/?service=SmartCam',uname,credentials,None,None)
 		Sawyer=await RRN.AsyncConnectService('rr+ws://128.113.224.57:8884/?service=Sawyer',uname,credentials,None,None)
 		UR=await RRN.AsyncConnectService('rr+ws://128.113.224.57:2355/?service=Universal_Robot',uname,credentials,None,None)
-		c_host=await RRN.AsyncConnectService('rr+tcp://localhost:2366?service=Webcam',uname,credentials,None,None)
+		c_host=await RRN.AsyncConnectService('rr+ws://128.113.224.57:2366?service=Webcam',uname,credentials,None,None)
+		c= await c_host.async_get_Webcams(0,None)
 
 		print_div("Running!")
 
@@ -50,7 +50,18 @@ async def client_matplotlib():
 
 		while True:
 			await animate(0,Sawyer,UR,inst,ax)
-			await animate2(0,c_host,ax1)
+
+			#Connect the pipe FrameStream to get the PipeEndpoint p
+			p= await c.FrameStream.AsyncConnect(-1,None)
+
+			#Set the callback for when a new pipe packet is received to the
+			#new_frame function
+			p.PacketReceivedEvent+=new_frame
+			try:
+				c.StartStreaming()
+			except: pass
+
+
 			await RRN.AsyncSleep(0.01,None)
 
 	except:
@@ -130,6 +141,43 @@ async def animate(i, Sawyer, UR, inst,ax):
 	ax.text(0.515, 0.7, text_UR_end, transform=ax.transAxes, fontsize=14,
 			bbox=props)
 
+canvas = document.getElementById("image")
+ctx = canvas.getContext("2d")
+
+def ShowFrame(image):
+
+    if (canvas == null):
+        canvas = document.getElementById<HTMLCanvasElement>("image")
+        ctx = canvas.getContext(CanvasTypes.CanvasContext2DType.CanvasRenderingContext2D)
+
+    if (imageData == null):
+    
+        imageData = ctx.createImageData(image.width, image.height)
+        imageBytes = imageData.Data
+    
+
+    if (imageData.Width != image.width) or (imageData.Height != image.height):
+    
+        imageData = ctx.createImageData(image.width, image.height)
+        imageBytes = imageData.Data
+    
+
+    for y in range(image.height):
+    
+        for x in range(image.width):
+        
+            index1 = (x + image.width * y) * 4
+            index2 = (x * 3 + image.step * y)
+            imageBytes[index1] = image.data[index2 + 2]
+            imageBytes[index1 + 1] = image.data[index2 + 1]
+            imageBytes[index1 + 2] = image.data[index2]
+            imageBytes[index1 + 3] = 255
+
+    ctx.putImageData(imageData, 0, 0)
+
+
+
+
 def WebcamImageToMat(image):
 	frame2=image.data.reshape([image.height, image.width, 3], order='C')
 	return frame2
@@ -144,11 +192,11 @@ def new_frame(pipe_ep):
 		image=pipe_ep.ReceivePacket()
 		#Convert the packet to an image and set the global variable
 		current_frame=WebcamImageToMat(image)
+		ShowFrame(current_frame)
 
 async def animate2(i, c_host,ax1):
 
 	c= await c_host.async_get_Webcams(0,None)
-	print(c)
 
 	#Connect the pipe FrameStream to get the PipeEndpoint p
 	p= await c.FrameStream.AsyncConnect(-1,None)
