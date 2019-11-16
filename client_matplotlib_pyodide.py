@@ -43,10 +43,12 @@ async def client_matplotlib():
 		c_host=await RRN.AsyncConnectService('rr+ws://128.113.224.57:2366?service=Webcam',uname,credentials,None,None)
 		c= await c_host.async_get_Webcams(0,None)
 
+		p= await c.FrameStream.AsyncConnect(-1,None)
+
 		print_div("Running!")
 		
 		canvas = document.getElementById("image")
-		global ctx
+		global ctx, canvas
 		ctx = canvas.getContext("2d")
 
 		fig, ax = plt.subplots()
@@ -55,11 +57,6 @@ async def client_matplotlib():
 		while True:
 			await animate(0,Sawyer,UR,inst,ax)
 
-			#Connect the pipe FrameStream to get the PipeEndpoint p
-			p= await c.FrameStream.AsyncConnect(-1,None)
-
-			#Set the callback for when a new pipe packet is received to the
-			#new_frame function
 			p.PacketReceivedEvent+=new_frame
 			try:
 				c.StartStreaming()
@@ -149,10 +146,10 @@ async def animate(i, Sawyer, UR, inst,ax):
 
 def ShowFrame(image):
 
+	global canvas, ctx
     if (canvas == null):
-        canvas = document.getElementById<HTMLCanvasElement>("image")
-        ctx = canvas.getContext(CanvasTypes.CanvasContext2DType.CanvasRenderingContext2D)
-
+        canvas = document.getElementById("image")
+		ctx = canvas.getContext("2d")
     if (imageData == null):
     
         imageData = ctx.createImageData(image.width, image.height)
