@@ -188,6 +188,7 @@ def WebcamImageToMat(image):
 current_frame=np.zeros((100,100,3))
 
 def new_frame(pipe_ep):
+	print_div("new_frame")
 	global current_frame
 	#Loop to get the newest frame
 	while (pipe_ep.Available > 0):
