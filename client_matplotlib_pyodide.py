@@ -201,7 +201,7 @@ async def client_matplotlib():
 
 		imageData=ctx.createImageData(100,100)
 
-		for i in range(0,imageData.data.length,4): 
+		for i in range(0,len(imageData.data),4): 
 			imageData.data[i + 0] = 190;  
 			imageData.data[i + 1] = 0;    
 			imageData.data[i + 2] = 210;  
