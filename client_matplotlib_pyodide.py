@@ -7,20 +7,19 @@ import math
 import warnings
 
 
-ex=np.array([[1],[0],[0]])
-ey=np.array([[0],[1],[0]])
-ez=np.array([[0],[0],[1]])
-H=np.concatenate((ez,-ey,-ey,-ey,-ez,-ey),axis=1)
-p0=np.array([[0],[0],[0]])
-p1=np.array([[0],[0],[0.089159]])
-p2=np.array([[-0.425],[0],[0]])
-p3=np.array([[-0.39225],[0],[0]])
-p4=np.array([[0],[-0.10915],[0]])
-p5=np.array([[0],[0],[-0.09465]])
-p6=np.array([[0],[-0.0823],[0]])
-P=np.concatenate((p0,p1,p2,p3,p4,p5,p6),axis=1)
-joint_type=np.zeros(6)
-
+# ex=np.array([[1],[0],[0]])
+# ey=np.array([[0],[1],[0]])
+# ez=np.array([[0],[0],[1]])
+# H=np.concatenate((ez,-ey,-ey,-ey,-ez,-ey),axis=1)
+# p0=np.array([[0],[0],[0]])
+# p1=np.array([[0],[0],[0.089159]])
+# p2=np.array([[-0.425],[0],[0]])
+# p3=np.array([[-0.39225],[0],[0]])
+# p4=np.array([[0],[-0.10915],[0]])
+# p5=np.array([[0],[0],[-0.09465]])
+# p6=np.array([[0],[-0.0823],[0]])
+# P=np.concatenate((p0,p1,p2,p3,p4,p5,p6),axis=1)
+# joint_type=np.zeros(6)
 
 def H_inv(H):							#inverse the homogeneous transformation matrix
 	R=H[:2,:2]
@@ -45,6 +44,10 @@ async def client_matplotlib():
 		c= await c_host.async_get_Webcams(0,None)
 
 		print_div("Running!")
+		
+		canvas = document.getElementById("image")
+		global ctx
+		ctx = canvas.getContext("2d")
 
 		fig, ax = plt.subplots()
 		fig.show()
@@ -128,7 +131,7 @@ async def animate(i, Sawyer, UR, inst,ax):
 
 
 	# place a text box in upper left in axes coords
-	ax.text(0.02, 0.6, text_Sawyer, transform=ax.transAxes, fontsize=14,
+	ax.text(0.02, 0.5, text_Sawyer, transform=ax.transAxes, fontsize=14,
 			bbox=props)
 
 	text_Sawyer_end = '\n'.join((
@@ -142,8 +145,7 @@ async def animate(i, Sawyer, UR, inst,ax):
 	ax.text(0.515, 0.7, text_UR_end, transform=ax.transAxes, fontsize=14,
 			bbox=props)
 
-canvas = document.getElementById("image")
-ctx = canvas.getContext("2d")
+
 
 def ShowFrame(image):
 
