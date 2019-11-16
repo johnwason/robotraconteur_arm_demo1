@@ -4,7 +4,8 @@ from RobotRaconteur.Client import *
 from matplotlib import pyplot as plt
 import numpy as np
 import math
-from js import document
+import warnings
+
 
 ex=np.array([[1],[0],[0]])
 ey=np.array([[0],[1],[0]])
@@ -34,7 +35,7 @@ async def client_matplotlib():
 	uname=document.getElementById("uname").value
 	psw=document.getElementById("psw").value
 
-	credentials="password":RR.RobotRaconteurVarValue(psw,"string")
+	credentials={"password":RR.RobotRaconteurVarValue(psw,"string")}
 
 	try:
 		inst=await RRN.AsyncConnectService('rr+ws://128.113.224.57:52222/?service=SmartCam',uname,credentials,None,None)
