@@ -104,7 +104,7 @@ async def animate(i, Sawyer, UR, inst,ax):
 	ax.plot(pose_Sawyer_C[0],pose_Sawyer_C[1],'ro',color='blue')
 	pose_UR_C=np.dot(H_UR_C,np.array([[pose_UR[0]['position']['x']],[pose_UR[0]['position']['y']],[1]]))
 	ax.plot(pose_UR_C[0],pose_UR_C[1],'ro',color='blue')
-	ax.set(xlim=(-1, 2), ylim=(-1, 2))
+	ax.set(xlim=(0, 2), ylim=(-1, 2))
 	props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 
 	text_UR = '\n'.join((
@@ -128,7 +128,7 @@ async def animate(i, Sawyer, UR, inst,ax):
 
 
 	# place a text box in upper left in axes coords
-	ax.text(0.02, 0.1, text_Sawyer, transform=ax.transAxes, fontsize=14,
+	ax.text(0.02, 0.7, text_Sawyer, transform=ax.transAxes, fontsize=14,
 			bbox=props)
 
 	text_Sawyer_end = '\n'.join((
