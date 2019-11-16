@@ -48,7 +48,6 @@ async def client_matplotlib():
 		print_div("Running!")
 		
 		canvas = document.getElementById("image")
-		global ctx, canvas
 		ctx = canvas.getContext("2d")
 
 		fig, ax = plt.subplots()
