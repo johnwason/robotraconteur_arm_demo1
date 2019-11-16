@@ -147,33 +147,33 @@ async def animate(i, Sawyer, UR, inst,ax):
 def ShowFrame(image):
 
 	global canvas, ctx
-    if (canvas == null):
-        canvas = document.getElementById("image")
+	if (canvas == null):
+		canvas = document.getElementById("image")
 		ctx = canvas.getContext("2d")
-    if (imageData == null):
-    
-        imageData = ctx.createImageData(image.width, image.height)
-        imageBytes = imageData.Data
-    
+	if (imageData == null):
+	
+		imageData = ctx.createImageData(image.width, image.height)
+		imageBytes = imageData.Data
+	
 
-    if (imageData.Width != image.width) or (imageData.Height != image.height):
-    
-        imageData = ctx.createImageData(image.width, image.height)
-        imageBytes = imageData.Data
-    
+	if (imageData.Width != image.width) or (imageData.Height != image.height):
+	
+		imageData = ctx.createImageData(image.width, image.height)
+		imageBytes = imageData.Data
+	
 
-    for y in range(image.height):
-    
-        for x in range(image.width):
-        
-            index1 = (x + image.width * y) * 4
-            index2 = (x * 3 + image.step * y)
-            imageBytes[index1] = image.data[index2 + 2]
-            imageBytes[index1 + 1] = image.data[index2 + 1]
-            imageBytes[index1 + 2] = image.data[index2]
-            imageBytes[index1 + 3] = 255
+	for y in range(image.height):
+	
+		for x in range(image.width):
+		
+			index1 = (x + image.width * y) * 4
+			index2 = (x * 3 + image.step * y)
+			imageBytes[index1] = image.data[index2 + 2]
+			imageBytes[index1 + 1] = image.data[index2 + 1]
+			imageBytes[index1 + 2] = image.data[index2]
+			imageBytes[index1 + 3] = 255
 
-    ctx.putImageData(imageData, 0, 0)
+	ctx.putImageData(imageData, 0, 0)
 
 
 
