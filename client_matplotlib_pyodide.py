@@ -177,9 +177,6 @@ def ShowFrame(image):
 
 
 
-def WebcamImageToMat(image):
-	frame2=image.data.reshape([image.height, image.width, 3], order='C')
-	return frame2
 
 current_frame=np.zeros((100,100,3))
 
@@ -191,8 +188,7 @@ def new_frame(pipe_ep):
 		#Receive the packet
 		image=pipe_ep.ReceivePacket()
 		#Convert the packet to an image and set the global variable
-		current_frame=WebcamImageToMat(image)
-		ShowFrame(current_frame)
+		ShowFrame(image)
 
 
 
