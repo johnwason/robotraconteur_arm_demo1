@@ -8,6 +8,8 @@ import numpy as np
 import math
 import warnings
 
+canvas=None
+ctx=None
 
 # def H_inv(H):							#inverse the homogeneous transformation matrix
 # 	R=H[:2,:2]
@@ -131,9 +133,9 @@ import warnings
 
 
 
-def ShowFrame(image,canvas,ctx):
-
-	if (canvas == null):
+def ShowFrame(image):
+	global canvas, ctx
+	if (canvas == None):
 		canvas = document.getElementById("image")
 		ctx = canvas.getContext("2d")
 	
@@ -161,13 +163,13 @@ def ShowFrame(image,canvas,ctx):
 
 
 
-def new_frame(pipe_ep,canvas,ctx):
+def new_frame(pipe_ep):
 	#Loop to get the newest frame
 	while (pipe_ep.Available > 0):
 		#Receive the packet
 		image=pipe_ep.ReceivePacket()
 		#Convert the packet to an image and set the global variable
-		ShowFrame(image,canvas,ctx)
+		ShowFrame(image)
 
 
 
@@ -184,6 +186,7 @@ async def client_matplotlib():
 
 		p= await c.FrameStream.AsyncConnect(-1,None)
 		
+		global canvas, ctx
 		canvas = document.getElementById("image")
 		ctx = canvas.getContext("2d")
 
@@ -193,7 +196,7 @@ async def client_matplotlib():
 		
 		while True:
 
-			p.PacketReceivedEvent+=new_frame(canvas,ctx)
+			p.PacketReceivedEvent+=new_frame()
 			c.async_StartStreaming(None)
 
 
