@@ -130,46 +130,37 @@ ctx=None
 # 	r'$y=%.2f$' % (pose_UR_C[1], )))
 # 	ax.text(0.515, 0.7, text_UR_end, transform=ax.transAxes, fontsize=14,
 # 			bbox=props)
+	
 
 
 
-def ShowFrame(image):
+async def new_frame(pipe_ep):
 	global canvas, ctx
-	if (canvas == None):
-		canvas = document.getElementById("image")
-		ctx = canvas.getContext("2d")
-	
-	imageBytes=np.zeros(4*image.width*image.height)
-
-
-	for y in range(image.height):
-	
-		for x in range(image.width):
-		
-			index1 = (x + image.width * y) * 4
-			index2 = (x * 3 + image.step * y)
-			imageBytes[index1] = image.data[index2 + 2]
-			imageBytes[index1 + 1] = image.data[index2 + 1]
-			imageBytes[index1 + 2] = image.data[index2]
-			imageBytes[index1 + 3] = 255
-			print_div(index1)
-			print_div(index2)
-
-	imageData=ImageData.new(bytes(imageBytes),image.width,image.height)
-
-
-	ctx.putImageData(imageData, 0, 0)
-
-
-
-
-def new_frame(pipe_ep):
 	#Loop to get the newest frame
 	while (pipe_ep.Available > 0):
 		#Receive the packet
 		image=pipe_ep.ReceivePacket()
 		#Convert the packet to an image and set the global variable
-		ShowFrame(image)
+		
+		if (canvas == None):
+			canvas = document.getElementById("image")
+			ctx = canvas.getContext("2d")
+		
+		imageBytes=np.zeros(4*image.width*image.height)
+		for y in range(image.height):
+		
+			for x in range(image.width):
+			
+				index1 = (x + image.width * y) * 4
+				index2 = (x * 3 + image.step * y)
+				imageBytes[index1] = image.data[index2 + 2]
+				imageBytes[index1 + 1] = image.data[index2 + 1]
+				imageBytes[index1 + 2] = image.data[index2]
+				imageBytes[index1 + 3] = 255
+
+		imageData=ImageData.new(bytes(imageBytes),image.width,image.height)
+		ctx.putImageData(imageData, 0, 0)
+
 
 
 
@@ -196,7 +187,7 @@ async def client_matplotlib():
 		
 		while True:
 
-			p.PacketReceivedEvent+=new_frame
+			await p.PacketReceivedEvent+=new_frame
 			c.async_StartStreaming(None)
 
 
