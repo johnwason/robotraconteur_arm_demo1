@@ -202,8 +202,8 @@ async def client_matplotlib():
 			d[i+2] = 0
 			d[i+3] = 255
 
-		print_div(d)
 		image_data=ImageData.new(d,100,100)
+		print_div(image_data.data)
 		ctx.putImageData(image_data, 10, 10)
 
 	except:
