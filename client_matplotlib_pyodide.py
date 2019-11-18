@@ -134,7 +134,7 @@ ctx=None
 
 
 
-async def new_frame(pipe_ep):
+def new_frame(pipe_ep):
 	global canvas, ctx
 	#Loop to get the newest frame
 	while (pipe_ep.Available > 0):
@@ -187,7 +187,7 @@ async def client_matplotlib():
 		
 		while True:
 
-			p.PacketReceivedEvent+= await new_frame
+			p.PacketReceivedEvent+= new_frame
 			c.async_StartStreaming(None)
 
 
