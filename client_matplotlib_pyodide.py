@@ -1,6 +1,7 @@
 from js import print_div
 from js import document
 from js import ImageData
+from js import Uint8ClampedArray
 from RobotRaconteur.Client import *
 from matplotlib import pyplot as plt
 import numpy as np
@@ -202,7 +203,7 @@ async def client_matplotlib():
 			d[i+2] = 0
 			d[i+3] = 255
 
-		image_data=ImageData.new(bytearray(d),100,100)
+		image_data=ImageData.new(Uint8ClampedArray(d),100,100)
 		print_div(image_data.data)
 		ctx.putImageData(image_data, 10, 10)
 
