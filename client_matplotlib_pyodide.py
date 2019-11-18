@@ -162,7 +162,8 @@ def ShowFrame(image):
 			imageBytes[index1 + 2] = image.data[index2]
 			imageBytes[index1 + 3] = 255
 
-	print_div(image.width, image.height)
+	print_div(image.width)
+	print_div(image.height)
 	imageData=ImageData.new(bytes(imageBytes),image.width,image.height)
 
 
