@@ -158,14 +158,14 @@ def new_frame(pipe_ep):
 				imageBytes[index1 + 2] = image.data[index2]
 				imageBytes[index1 + 3] = 255
 
-		try:
-			print_div(len(imageBytes))
-			print_div(image.width)
-			print_div(image.height)
-			imageData=ImageData.new(bytes(imageBytes),image.width,image.height)
-			ctx.putImageData(imageData, 0, 0)
-		except:
-			print_div("index error here")
+
+		# print_div(len(imageBytes))
+		# print_div(image.width)
+		# print_div(image.height)
+		imageData=ImageData.new(bytes(imageBytes),image.width,image.height)
+		print_div(imageData.data)
+		ctx.putImageData(imageData, 0, 0)
+
 
 
 
