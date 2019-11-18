@@ -196,12 +196,12 @@ async def client_matplotlib():
 		canvas = document.getElementById("image")
 		ctx = canvas.getContext("2d")
 
-		d=[]
-		for i in range(0,40000,4):
-			d.append(255)
-			d.append(0)
-			d.append(0)
-			d.append(255)
+		d=np.zeros(40000)
+		for i in range(0,len(d),4):
+			d[i+0] = 255
+			d[i+1] = 0
+			d[i+2] = 0
+			d[i+3] = 255
 
 		image_data=ImageData.new(bytes(d),100,100)
 		print_div(image_data.data)
