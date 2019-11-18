@@ -187,7 +187,7 @@ async def client_matplotlib():
 		
 		while True:
 
-			await p.PacketReceivedEvent+=new_frame
+			p.PacketReceivedEvent+=new_frame
 			c.async_StartStreaming(None)
 
 
