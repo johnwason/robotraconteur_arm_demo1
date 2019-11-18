@@ -167,7 +167,7 @@ def new_frame(pipe_ep,canvas,ctx):
 		#Receive the packet
 		image=pipe_ep.ReceivePacket()
 		#Convert the packet to an image and set the global variable
-		ShowFrame(image)
+		ShowFrame(image,canvas,ctx)
 
 
 
