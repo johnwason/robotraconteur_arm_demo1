@@ -160,7 +160,7 @@ def ShowFrame(image):
 	# 		imageBytes[index1 + 2] = image.data[index2]
 	# 		imageBytes[index1 + 3] = 255
 
-	image_data=ImageData.new(bytes(image.data),image.width,image.height)
+	imageData=ImageData.new(bytes(image.data),image.width,image.height)
 
 	ctx.putImageData(imageData, 0, 0)
 
