@@ -148,19 +148,22 @@ def ShowFrame(image):
 	# 	imageData = ctx.createImageData(image.width, image.height)
 	# 	imageBytes = imageData.data
 	
+	imageBytes=np.zeros(4*image.width*image.height)
 
-	# for y in range(image.height):
+
+	for y in range(image.height):
 	
-	# 	for x in range(image.width):
+		for x in range(image.width):
 		
-	# 		index1 = (x + image.width * y) * 4
-	# 		index2 = (x * 3 + image.step * y)
-	# 		imageBytes[index1] = image.data[index2 + 2]
-	# 		imageBytes[index1 + 1] = image.data[index2 + 1]
-	# 		imageBytes[index1 + 2] = image.data[index2]
-	# 		imageBytes[index1 + 3] = 255
+			index1 = (x + image.width * y) * 4
+			index2 = (x * 3 + image.step * y)
+			imageBytes[index1] = image.data[index2 + 2]
+			imageBytes[index1 + 1] = image.data[index2 + 1]
+			imageBytes[index1 + 2] = image.data[index2]
+			imageBytes[index1 + 3] = 255
 
-	imageData=ImageData.new(bytes(image.data),image.width,image.height)
+	imageData=ImageData.new(bytes(imageBytes),image.width,image.height)
+
 
 	ctx.putImageData(imageData, 0, 0)
 
@@ -202,6 +205,7 @@ async def client_matplotlib():
 
 			p.PacketReceivedEvent+=new_frame
 			try:
+				print_div("Running!")
 				c.StartStreaming()
 			except: pass
 
