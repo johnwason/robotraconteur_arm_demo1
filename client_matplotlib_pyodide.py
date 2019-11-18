@@ -205,8 +205,8 @@ async def client_matplotlib():
 
 			p.PacketReceivedEvent+=new_frame
 			try:
-				print_div("Running!")
 				c.StartStreaming()
+				print_div("Running!")
 			except: pass
 
 
