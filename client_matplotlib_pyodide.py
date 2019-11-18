@@ -1,5 +1,6 @@
 from js import print_div
 from js import document
+from js import ImageData
 from RobotRaconteur.Client import *
 from matplotlib import pyplot as plt
 import numpy as np
@@ -194,16 +195,16 @@ async def client_matplotlib():
 		canvas = document.getElementById("image")
 		ctx = canvas.getContext("2d")
 
-		imgData = ctx.createImageData(100, 100)
-		d=imgData.data
-		for i in range(0,len(imgData.data),4):
+		d=np.zeros(40000)
+		for i in range(0,len(d),4):
 			d[i+0] = 255
 			d[i+1] = 0
 			d[i+2] = 0
 			d[i+3] = 255
-		imgData.data=d
+
 		print_div(d)
-		ctx.putImageData(imgData, 10, 10)
+		image_data=ImageData.new(d,width,height)
+		ctx.putImageData(image_data, 10, 10)
 
 	except:
 		import traceback
