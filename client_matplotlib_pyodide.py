@@ -162,6 +162,7 @@ def ShowFrame(image):
 			imageBytes[index1 + 2] = image.data[index2]
 			imageBytes[index1 + 3] = 255
 
+	print_div(imageBytes)
 	imageData=ImageData.new(bytes(imageBytes),image.width,image.height)
 
 
@@ -171,7 +172,6 @@ def ShowFrame(image):
 
 
 def new_frame(pipe_ep):
-	print_div("new_frame")
 	#Loop to get the newest frame
 	while (pipe_ep.Available > 0):
 		#Receive the packet
