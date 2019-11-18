@@ -131,52 +131,50 @@ import warnings
 
 
 
-# def ShowFrame(image):
+def ShowFrame(image):
 
-# 	global canvas, ctx
-# 	if (canvas == null):
-# 		canvas = document.getElementById("image")
-# 		ctx = canvas.getContext("2d")
-# 	if (imageData == null):
+	global canvas, ctx
+	# if (canvas == null):
+	# 	canvas = document.getElementById("image")
+	# 	ctx = canvas.getContext("2d")
+	# if (imageData == null):
 	
-# 		imageData = ctx.createImageData(image.width, image.height)
-# 		imageBytes = imageData.data
-	
-
-# 	if (imageData.Width != image.width) or (imageData.Height != image.height):
-	
-# 		imageData = ctx.createImageData(image.width, image.height)
-# 		imageBytes = imageData.data
+	# 	imageData = ctx.createImageData(image.width, image.height)
+	# 	imageBytes = imageData.data
 	
 
-# 	for y in range(image.height):
+	# if (imageData.Width != image.width) or (imageData.Height != image.height):
 	
-# 		for x in range(image.width):
+	# 	imageData = ctx.createImageData(image.width, image.height)
+	# 	imageBytes = imageData.data
+	
+
+	# for y in range(image.height):
+	
+	# 	for x in range(image.width):
 		
-# 			index1 = (x + image.width * y) * 4
-# 			index2 = (x * 3 + image.step * y)
-# 			imageBytes[index1] = image.data[index2 + 2]
-# 			imageBytes[index1 + 1] = image.data[index2 + 1]
-# 			imageBytes[index1 + 2] = image.data[index2]
-# 			imageBytes[index1 + 3] = 255
+	# 		index1 = (x + image.width * y) * 4
+	# 		index2 = (x * 3 + image.step * y)
+	# 		imageBytes[index1] = image.data[index2 + 2]
+	# 		imageBytes[index1 + 1] = image.data[index2 + 1]
+	# 		imageBytes[index1 + 2] = image.data[index2]
+	# 		imageBytes[index1 + 3] = 255
 
-# 	ctx.putImageData(imageData, 0, 0)
+	image_data=ImageData.new(bytes(image.data),image.width,image.height)
+
+	ctx.putImageData(imageData, 0, 0)
 
 
 
 
+def new_frame(pipe_ep):
 
-# current_frame=np.zeros((100,100,3))
-
-# def new_frame(pipe_ep):
-# 	print_div("new_frame")
-# 	global current_frame
-# 	#Loop to get the newest frame
-# 	while (pipe_ep.Available > 0):
-# 		#Receive the packet
-# 		image=pipe_ep.ReceivePacket()
-# 		#Convert the packet to an image and set the global variable
-# 		ShowFrame(image)
+	#Loop to get the newest frame
+	while (pipe_ep.Available > 0):
+		#Receive the packet
+		image=pipe_ep.ReceivePacket()
+		#Convert the packet to an image and set the global variable
+		ShowFrame(image)
 
 
 
@@ -189,23 +187,28 @@ async def client_matplotlib():
 
 	try:
 		c_host=await RRN.AsyncConnectService('rr+ws://128.113.224.57:2366?service=Webcam',uname,credentials,None,None)
+		c= await c_host.async_get_Webcams(0,None)
 
+		p= await c.FrameStream.AsyncConnect(-1,None)
 
 		print_div("Running!")
 		
 		canvas = document.getElementById("image")
 		ctx = canvas.getContext("2d")
 
-		d=np.zeros(40000)
-		for i in range(0,len(d),4):
-			d[i+0] = 255
-			d[i+1] = 0
-			d[i+2] = 0
-			d[i+3] = 255
 
-		image_data=ImageData.new(bytes(d),100,100)
-		print_div(image_data.data)
-		ctx.putImageData(image_data, 10, 10)
+		print_div("Running!")
+		
+		
+		while True:
+
+			p.PacketReceivedEvent+=new_frame
+			try:
+				c.StartStreaming()
+			except: pass
+
+
+			await RRN.AsyncSleep(0.01,None)
 
 	except:
 		import traceback
