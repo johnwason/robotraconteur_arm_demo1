@@ -204,10 +204,10 @@ async def client_matplotlib():
 			imgData.data[i+1] = 0
 			imgData.data[i+2] = 0
 			imgData.data[i+3] = 255
-			print_div(imageData.data[i])
-			print_div(imageData.data[i+1])
-			print_div(imageData.data[i+2])
-			print_div(imageData.data[i+3])
+			print_div(imgData.data[i])
+			print_div(imgData.data[i+1])
+			print_div(imgData.data[i+2])
+			print_div(imgData.data[i+3])
 		print_div(imgData.data)
 		ctx.putImageData(imgData, 10, 10)
 
