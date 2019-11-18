@@ -168,7 +168,7 @@ def ShowFrame(image):
 
 
 def new_frame(pipe_ep):
-
+	print_div("new_frame")
 	#Loop to get the newest frame
 	while (pipe_ep.Available > 0):
 		#Receive the packet
@@ -190,8 +190,6 @@ async def client_matplotlib():
 		c= await c_host.async_get_Webcams(0,None)
 
 		p= await c.FrameStream.AsyncConnect(-1,None)
-
-		print_div("Running!")
 		
 		canvas = document.getElementById("image")
 		ctx = canvas.getContext("2d")
