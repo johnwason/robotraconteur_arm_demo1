@@ -134,19 +134,9 @@ import warnings
 def ShowFrame(image):
 
 	global canvas, ctx
-	# if (canvas == null):
-	# 	canvas = document.getElementById("image")
-	# 	ctx = canvas.getContext("2d")
-	# if (imageData == null):
-	
-	# 	imageData = ctx.createImageData(image.width, image.height)
-	# 	imageBytes = imageData.data
-	
-
-	# if (imageData.Width != image.width) or (imageData.Height != image.height):
-	
-	# 	imageData = ctx.createImageData(image.width, image.height)
-	# 	imageBytes = imageData.data
+	if (canvas == null):
+		canvas = document.getElementById("image")
+		ctx = canvas.getContext("2d")
 	
 	imageBytes=np.zeros(4*image.width*image.height)
 
@@ -161,10 +151,9 @@ def ShowFrame(image):
 			imageBytes[index1 + 1] = image.data[index2 + 1]
 			imageBytes[index1 + 2] = image.data[index2]
 			imageBytes[index1 + 3] = 255
+			print_div(index1)
+			print_div(index2)
 
-	print_div(image.width)
-	print_div(image.height)
-	print_div(len(imageBytes))
 	imageData=ImageData.new(bytes(imageBytes),image.width,image.height)
 
 
