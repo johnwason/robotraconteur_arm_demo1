@@ -191,7 +191,7 @@ async def client_matplotlib():
 		UR=await RRN.AsyncConnectService('rr+ws://128.113.224.57:2355/?service=Universal_Robot',uname,credentials,None,None)
 		c_host=await RRN.AsyncConnectService('rr+ws://128.113.224.57:2366?service=Webcam',uname,credentials,None,None)
 
-		
+		print_div("Running!")
 		canvas = document.getElementById("image")
 		ctx = canvas.getContext("2d")
 
