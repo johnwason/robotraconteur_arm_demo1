@@ -131,9 +131,8 @@ import warnings
 
 
 
-def ShowFrame(image):
+def ShowFrame(image,canvas,ctx):
 
-	global canvas, ctx
 	if (canvas == null):
 		canvas = document.getElementById("image")
 		ctx = canvas.getContext("2d")
@@ -162,7 +161,7 @@ def ShowFrame(image):
 
 
 
-def new_frame(pipe_ep):
+def new_frame(pipe_ep,canvas,ctx):
 	#Loop to get the newest frame
 	while (pipe_ep.Available > 0):
 		#Receive the packet
@@ -194,7 +193,7 @@ async def client_matplotlib():
 		
 		while True:
 
-			p.PacketReceivedEvent+=new_frame
+			p.PacketReceivedEvent+=new_frame(canvas,ctx)
 			c.async_StartStreaming(None)
 
 
