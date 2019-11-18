@@ -195,7 +195,7 @@ async def client_matplotlib():
 		canvas = document.getElementById("image")
 		ctx = canvas.getContext("2d")
 
-		d=np.zeros((40000,),dtype=np.int8)
+		d=np.zeros((40000,),dtype=np.uint8)
 		for i in range(0,len(d),4):
 			d[i+0] = 255
 			d[i+1] = 0
