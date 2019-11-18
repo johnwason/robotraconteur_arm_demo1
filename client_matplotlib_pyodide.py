@@ -197,16 +197,15 @@ async def client_matplotlib():
 		canvas = document.getElementById("image")
 		ctx = canvas.getContext("2d")
 
-		imageData=ctx.createImageData(100,100)
+		imgData = ctx.createImageData(100, 100)
 
-		for i in range(0,len(imageData.data),4): 
-			imageData.data[i + 0] = 190;  
-			imageData.data[i + 1] = 0;    
-			imageData.data[i + 2] = 210;  
-			imageData.data[i + 3] = 255;  
-		
+		for i in range(0,imgData.data,4):
+			imgData.data[i+0] = 255
+			imgData.data[i+1] = 0
+			imgData.data[i+2] = 0
+			imgData.data[i+3] = 255
 
-		ctx.putImageData(imageData, 20, 20);
+		ctx.putImageData(imgData, 10, 10)
 
 	except:
 		import traceback
