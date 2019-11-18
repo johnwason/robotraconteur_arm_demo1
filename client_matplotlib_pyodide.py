@@ -200,12 +200,11 @@ async def client_matplotlib():
 		imgData = ctx.createImageData(100, 100)
 
 		for i in range(0,len(imgData.data),4):
-			print_div(i)
 			imgData.data[i+0] = 255
 			imgData.data[i+1] = 0
 			imgData.data[i+2] = 0
 			imgData.data[i+3] = 255
-
+		print_div(imgData)
 		ctx.putImageData(imgData, 10, 10)
 
 	except:
