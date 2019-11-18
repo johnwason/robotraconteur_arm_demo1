@@ -186,9 +186,6 @@ async def client_matplotlib():
 	credentials={"password":RR.RobotRaconteurVarValue(psw,"string")}
 
 	try:
-		# inst=await RRN.AsyncConnectService('rr+ws://128.113.224.57:52222/?service=SmartCam',uname,credentials,None,None)
-		# Sawyer=await RRN.AsyncConnectService('rr+ws://128.113.224.57:8884/?service=Sawyer',uname,credentials,None,None)
-		# UR=await RRN.AsyncConnectService('rr+ws://128.113.224.57:2355/?service=Universal_Robot',uname,credentials,None,None)
 		c_host=await RRN.AsyncConnectService('rr+ws://128.113.224.57:2366?service=Webcam',uname,credentials,None,None)
 
 
@@ -198,12 +195,13 @@ async def client_matplotlib():
 		ctx = canvas.getContext("2d")
 
 		imgData = ctx.createImageData(100, 100)
-
+		d=imgData.data
 		for i in range(0,len(imgData.data),4):
-			imgData.data[i+0] = 255
-			imgData.data[i+1] = 0
-			imgData.data[i+2] = 0
-			imgData.data[i+3] = 255
+			d[i+0] = 255
+			d[i+1] = 0
+			d[i+2] = 0
+			d[i+3] = 255
+		imgData.data=d
 		print_div(imgData.data)
 		ctx.putImageData(imgData, 10, 10)
 
