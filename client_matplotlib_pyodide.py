@@ -191,13 +191,22 @@ async def client_matplotlib():
 		UR=await RRN.AsyncConnectService('rr+ws://128.113.224.57:2355/?service=Universal_Robot',uname,credentials,None,None)
 		c_host=await RRN.AsyncConnectService('rr+ws://128.113.224.57:2366?service=Webcam',uname,credentials,None,None)
 
+
 		print_div("Running!")
+		
 		canvas = document.getElementById("image")
 		ctx = canvas.getContext("2d")
 
-		ctx.fillStyle = "#FF0000"
-		ctx.fillRect(0, 0, 150, 75)
+		imageData=ctx.createImageData(100,100)
 
+		for i in range(0,len(imageData.data),4): 
+			imageData.data[i + 0] = 190;  
+			imageData.data[i + 1] = 0;    
+			imageData.data[i + 2] = 210;  
+			imageData.data[i + 3] = 255;  
+		
+
+		ctx.putImageData(imageData, 20, 20);
 
 	except:
 		import traceback
