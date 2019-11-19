@@ -1,7 +1,6 @@
 from js import print_div
 from js import document
 from js import ImageData
-from js import Uint8ClampedArray
 from RobotRaconteur.Client import *
 from matplotlib import pyplot as plt
 import numpy as np
@@ -162,7 +161,7 @@ def new_frame(pipe_ep):
 		# print_div(len(imageBytes))
 		# print_div(image.width)
 		# print_div(image.height)
-		image_data=ImageData.new(bytes(111*np.ones(4*320*240, dtype=np.uint8)),320,240)
+		image_data=ImageData.new(bytes(111*np.ones(4*image.width*image.height, dtype=np.uint8)),image.width,image.height)
 		ctx.putImageData(image_data, 0, 0)
 
 
