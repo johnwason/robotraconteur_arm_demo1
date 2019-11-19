@@ -146,7 +146,7 @@ def new_frame(pipe_ep):
 			canvas = document.getElementById("image")
 			ctx = canvas.getContext("2d")
 		
-		imageBytes=np.zeros(4*image.width*image.height)
+		imageBytes=np.zeros(4*image.width*image.height, dtype=np.uint8)
 		for y in range(image.height):
 		
 			for x in range(image.width):
@@ -189,28 +189,26 @@ async def client_matplotlib():
 
 		print_div("Running!")
 
-		d=np.zeros(40000, dtype=np.uint8)
+		d=np.zeros(40000)
 		for i in range(0,len(d),4):
 			d[i+0] = 255
 			d[i+1] = 0
 			d[i+2] = 0
 			d[i+3] = 255
 
-		print_div(len(d))
 		image_data=ImageData.new(bytes(d),100,100)
+		print_div(image_data.data)
 		ctx.putImageData(image_data, 10, 10)
 
 		
-		# imageData=ImageData.new(bytes(111*np.ones(4*320*240)),320,240)
-		# ctx.putImageData(imageData, 0, 0)
 		
-		# while True:
+		while True:
 
-		# 	p.PacketReceivedEvent+= new_frame
-		# 	c.async_StartStreaming(None)
+			p.PacketReceivedEvent+= new_frame
+			c.async_StartStreaming(None)
 
 
-		# 	await RRN.AsyncSleep(0.01,None)
+			await RRN.AsyncSleep(0.01,None)
 
 	except:
 		import traceback
