@@ -189,7 +189,7 @@ async def client_matplotlib():
 
 		print_div("Running!")
 
-		d=np.zeros(40000)
+		d=np.zeros(40000, dtype=np.uint8)
 		for i in range(0,len(d),4):
 			d[i+0] = 255
 			d[i+1] = 0
