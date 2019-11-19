@@ -190,7 +190,7 @@ async def client_matplotlib():
 
 		print_div("Running!")
 		
-		imageData=ImageData.new(bytes(111*np.ones(400*320)),400,320)
+		imageData=ImageData.new(bytes(111*np.ones(320*240)),320,240)
 		ctx.putImageData(imageData, 0, 0)
 
 		# while True:
