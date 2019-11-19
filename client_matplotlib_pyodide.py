@@ -190,14 +190,16 @@ async def client_matplotlib():
 
 		print_div("Running!")
 		
-		
-		while True:
+		imageData=ImageData.new(bytes(111*np.ones(400*320)),400,320)
+		ctx.putImageData(imageData, 0, 0)
 
-			p.PacketReceivedEvent+= new_frame
-			c.async_StartStreaming(None)
+		# while True:
+
+		# 	p.PacketReceivedEvent+= new_frame
+		# 	c.async_StartStreaming(None)
 
 
-			await RRN.AsyncSleep(0.01,None)
+		# 	await RRN.AsyncSleep(0.01,None)
 
 	except:
 		import traceback
