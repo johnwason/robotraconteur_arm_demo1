@@ -146,7 +146,7 @@ def new_frame(pipe_ep):
 			canvas = document.getElementById("image")
 			ctx = canvas.getContext("2d")
 		
-		imageBytes=np.zeros(4*image.width*image.height, dtype=np.uint8)
+		imageBytes=np.zeros(4*image.width*image.height, dtype=np.uint8)		#dtype essential here
 		for y in range(image.height):
 		
 			for x in range(image.width):
@@ -162,7 +162,7 @@ def new_frame(pipe_ep):
 		# print_div(len(imageBytes))
 		# print_div(image.width)
 		# print_div(image.height)
-		imageData=ImageData.new(bytes(111*np.ones(4*320*240)),320,240)
+		imageData=ImageData.new(bytes(imageBytes),320,240)
 		ctx.putImageData(imageData, 0, 0)
 
 
