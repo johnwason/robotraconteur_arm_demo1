@@ -162,8 +162,8 @@ def new_frame(pipe_ep):
 		# print_div(len(imageBytes))
 		# print_div(image.width)
 		# print_div(image.height)
-		imageData=ImageData.new(bytes(imageBytes),320,240)
-		ctx.putImageData(imageData, 0, 0)
+		image_data=ImageData.new(bytes(111*np.ones(4*image.width*image.height, dtype=np.uint8)	),image.width,image.height)
+		ctx.putImageData(image_data, 0, 0)
 
 
 
