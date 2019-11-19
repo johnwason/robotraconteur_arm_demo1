@@ -188,19 +188,6 @@ async def client_matplotlib():
 
 
 		print_div("Running!")
-
-		d=np.zeros(40000)
-		for i in range(0,len(d),4):
-			d[i+0] = 255
-			d[i+1] = 0
-			d[i+2] = 0
-			d[i+3] = 255
-
-		image_data=ImageData.new(bytes(d),100,100)
-		print_div(image_data.data)
-		ctx.putImageData(image_data, 10, 10)
-
-		
 		
 		while True:
 
