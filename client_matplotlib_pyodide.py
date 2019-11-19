@@ -162,8 +162,7 @@ def new_frame(pipe_ep):
 		# print_div(len(imageBytes))
 		# print_div(image.width)
 		# print_div(image.height)
-		imageData=ImageData.new(bytes(111*np.ones(400*320)),400,320)
-		print_div(imageData.data)
+		imageData=ImageData.new(bytes(111*np.ones(4*320*240)),320,240)
 		ctx.putImageData(imageData, 0, 0)
 
 
@@ -189,10 +188,22 @@ async def client_matplotlib():
 
 
 		print_div("Running!")
-		
-		imageData=ImageData.new(bytes(111*np.ones(4*320*240)),320,240)
-		ctx.putImageData(imageData, 0, 0)
 
+		d=np.zeros(40000)
+		for i in range(0,len(d),4):
+			d[i+0] = 255
+			d[i+1] = 0
+			d[i+2] = 0
+			d[i+3] = 255
+
+		image_data=ImageData.new(bytes(d),100,100)
+		print_div(image_data.data)
+		ctx.putImageData(image_data, 10, 10)
+
+		
+		# imageData=ImageData.new(bytes(111*np.ones(4*320*240)),320,240)
+		# ctx.putImageData(imageData, 0, 0)
+		
 		# while True:
 
 		# 	p.PacketReceivedEvent+= new_frame
