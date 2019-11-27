@@ -19,21 +19,32 @@ def WebcamImageToMat(image):
     return frame2
 
 def new_frame(pipe_ep):
+	global canvas, ctx
 	#Loop to get the newest frame
 	while (pipe_ep.Available > 0):
 		#Receive the packet
 		image=pipe_ep.ReceivePacket()
 		#Convert the packet to an image and set the global variable
-		current_frame=WebcamImageToMat(image)
-		# Plotly.newPlot('video',[{'y':[0], 'x':[0]} ],{'images':[{	"source":current_frame,
-		# 															"xref": "paper",
-		# 													        "yref": "paper",
-		# 													        "x": 0,
-		# 													        "y": 1,
-		# 													        "sizex": 0.2,
-		# 													        "sizey": 0.2,
-		# 													        "xanchor": "right",
-		# 													        "yanchor": "bottom"}]})
+		
+		if (canvas == None):
+			canvas = document.getElementById("image")
+			ctx = canvas.getContext("2d")
+		
+		imageBytes=np.zeros(4*image.width*image.height, dtype=np.uint8)		#dtype essential here, IndexSizeError
+		for y in range(image.height):
+		
+			for x in range(image.width):
+			
+				index1 = (x + image.width * y) * 4
+				index2 = (x * 3 + image.step * y)
+				imageBytes[index1] = image.data[index2 + 2]
+				imageBytes[index1 + 1] = image.data[index2 + 1]
+				imageBytes[index1 + 2] = image.data[index2]
+				imageBytes[index1 + 3] = 255
+
+
+		image_data=ImageData.new(bytes(imageBytes),image.width,image.height)
+		ctx.putImageData(image_data, 0, 0,0,0,320,240)
 
 async def client_plotly():
 
@@ -50,6 +61,12 @@ async def client_plotly():
 		c= await c_host.async_get_Webcams(0,None)
 
 		p= await c.FrameStream.AsyncConnect(-1,None)
+		global canvas, ctx
+		canvas = document.getElementById("image")
+		ctx = canvas.getContext("2d")
+		print_div("Running!")
+		canvas = document.getElementById("image")
+		ctx = canvas.getContext("2d")
 
 		while True:
 			await plot(Sawyer,UR,inst)
