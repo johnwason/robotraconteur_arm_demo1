@@ -2,13 +2,10 @@ from js import print_div
 from js import document
 from js import ImageData
 from RobotRaconteur.Client import *
-from matplotlib import pyplot as plt
 import numpy as np
-import math
-import warnings
 
-canvas=None
-ctx=None
+from js import Plotly
+
 
 def H_inv(H):							#inverse the homogeneous transformation matrix
 	R=H[:2,:2]
@@ -22,35 +19,23 @@ def WebcamImageToMat(image):
     return frame2
 
 def new_frame(pipe_ep):
-	global canvas, ctx
 	#Loop to get the newest frame
 	while (pipe_ep.Available > 0):
 		#Receive the packet
 		image=pipe_ep.ReceivePacket()
 		#Convert the packet to an image and set the global variable
-		
-		if (canvas == None):
-			canvas = document.getElementById("image")
-			ctx = canvas.getContext("2d")
-		
-		imageBytes=np.zeros(4*image.width*image.height, dtype=np.uint8)		#dtype essential here, IndexSizeError
-		for y in range(image.height):
-		
-			for x in range(image.width):
-			
-				index1 = (x + image.width * y) * 4
-				index2 = (x * 3 + image.step * y)
-				imageBytes[index1] = image.data[index2 + 2]
-				imageBytes[index1 + 1] = image.data[index2 + 1]
-				imageBytes[index1 + 2] = image.data[index2]
-				imageBytes[index1 + 3] = 255
+		current_frame=WebcamImageToMat(image)
+		# Plotly.newPlot('video',[{'y':[0], 'x':[0]} ],{'images':[{	"source":current_frame,
+		# 															"xref": "paper",
+		# 													        "yref": "paper",
+		# 													        "x": 0,
+		# 													        "y": 1,
+		# 													        "sizex": 0.2,
+		# 													        "sizey": 0.2,
+		# 													        "xanchor": "right",
+		# 													        "yanchor": "bottom"}]})
 
-
-		image_data=ImageData.new(bytes(imageBytes),image.width,image.height)
-		ctx.putImageData(image_data, 0, 0,0,0,320,240)
-
-
-async def client_matplotlib():
+async def client_plotly():
 
 	uname=document.getElementById("uname").value
 	psw=document.getElementById("psw").value
@@ -66,21 +51,10 @@ async def client_matplotlib():
 
 		p= await c.FrameStream.AsyncConnect(-1,None)
 
-		global canvas, ctx
-		canvas = document.getElementById("image")
-		ctx = canvas.getContext("2d")
-		print_div("Running!")
-		
-		canvas = document.getElementById("image")
-		ctx = canvas.getContext("2d")
-
-		fig, ax = plt.subplots()
-		fig.show()
-
 		while True:
-			await animate(0,Sawyer,UR,inst,ax)
-
+			await plot(Sawyer,UR,inst)
 			p.PacketReceivedEvent+=new_frame
+
 			c.async_StartStreaming(None)
 
 
@@ -98,7 +72,7 @@ H_S_C=H_inv(H_Sawyer)
 H_UR_C=H_inv(H_UR)
 
 
-async def animate(i, Sawyer, UR, inst,ax):
+async def plot(Sawyer, UR, inst):
 
 	xs = []
 	ys = []
@@ -119,51 +93,20 @@ async def animate(i, Sawyer, UR, inst,ax):
 
 
 	# Draw x and y lists
-	ax.clear()
-	ax.plot(xs, ys,'ro')
 	pose_Sawyer_C=np.dot(H_S_C,np.array([[pose_Sawyer[0]['position']['x']],[pose_Sawyer[0]['position']['y']],[1]]))
-	ax.plot(pose_Sawyer_C[0],pose_Sawyer_C[1],'ro',color='blue')
 	pose_UR_C=np.dot(H_UR_C,np.array([[pose_UR[0]['position']['x']],[pose_UR[0]['position']['y']],[1]]))
-	ax.plot(pose_UR_C[0],pose_UR_C[1],'ro',color='blue')
-	ax.set(xlim=(-1, 2), ylim=(-1, 2))
-	props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-
-	text_UR = '\n'.join((
-	r'$q1=%.2f$' % (q_UR[0], ),
-	r'$q2=%.2f$' % (q_UR[1], ),
-	r'$q3=%.2f$' % (q_UR[2], ),
-	r'$q4=%.2f$' % (q_UR[3], ),
-	r'$q5=%.2f$' % (q_UR[4], ),
-	r'$q6=%.2f$' % (q_UR[5], )))
-
-	ax.text(0.75, 0.95, text_UR, transform=ax.transAxes, fontsize=14,
-			verticalalignment='top', bbox=props)
-	text_Sawyer = '\n'.join((
-	r'$q1=%.2f$' % (q_Sawyer[0], ),
-	r'$q2=%.2f$' % (q_Sawyer[1], ),
-	r'$q3=%.2f$' % (q_Sawyer[2], ),
-	r'$q4=%.2f$' % (q_Sawyer[3], ),
-	r'$q5=%.2f$' % (q_Sawyer[4], ),
-	r'$q6=%.2f$' % (q_Sawyer[5], ),
-	r'$q7=%.2f$' % (q_Sawyer[6], )))
 
 
-	# place a text box in upper left in axes coords
-	ax.text(0.02, 0.5, text_Sawyer, transform=ax.transAxes, fontsize=14,
-			bbox=props)
+	objects={ 'y': ys, 'x': xs ,'mode':'markers','name':'objects','type':'scatter','marker':{'size':10,'color':'#000000'}}
+	UR5_robot={ 'y': pose_UR_C[1], 'x': pose_UR_C[0] ,'mode':'markers','name':'UR5_robot','type':'scatter','marker':{'size':10,'color':'#27e3d3'}}
+	Sawyer_robot={ 'y': pose_Sawyer_C[1], 'x': pose_Sawyer_C[0] ,'mode':'markers','name':'Sawyer_robot','type':'scatter','marker':{'size':10,'color':'#e31010'}}
 
-	text_Sawyer_end = '\n'.join((
-	r'$x=%.2f$' % (pose_Sawyer_C[0], ),
-	r'$y=%.2f$' % (pose_Sawyer_C[1], )))
-	ax.text(0.28, 0.7, text_Sawyer_end, transform=ax.transAxes, fontsize=14,
-			bbox=props)
-	text_UR_end = '\n'.join((
-	r'$x=%.2f$' % (pose_UR_C[0], ),
-	r'$y=%.2f$' % (pose_UR_C[1], )))
-	ax.text(0.515, 0.7, text_UR_end, transform=ax.transAxes, fontsize=14,
-			bbox=props)
+	Plotly.react('plot',[objects,UR5_robot,Sawyer_robot],)
+
+
+
 	
 
 
 
-RR.WebLoop.run(client_matplotlib())
+RR.WebLoop.run(client_plotly())

@@ -2,7 +2,8 @@
     <head>
         <meta charset="utf-8"/>
         <script src="https://code.jquery.com/jquery-latest.js"></script>
-        <script src="https://robotraconteur.github.io/robotraconteur_pyodide/pyodide.js"></script>     
+        <script src="https://robotraconteur.github.io/robotraconteur_pyodide/pyodide.js"></script>  
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>  
     </head>
     <body>
         
@@ -16,8 +17,8 @@
             async function run_test(){
                 $("#auth").hide()
                 await languagePluginLoader;
-                await pyodide.loadPackage(["numpy","matplotlib"]);      
-                const response = await fetch("client_matplotlib_pyodide.py", {cache: "no-store"});
+                await pyodide.loadPackage(["numpy"]);      
+                const response = await fetch("client_plotly_pyodide.py", {cache: "no-store"});
                 const client_py = await response.text();
                 pyodide.runPython(client_py)
             }
@@ -36,6 +37,8 @@
                 <button type="submit">Connect</button>                
             </form>
         </div>
+        <body>  <div id="plot">      <!-- Plotly chart will be drawn inside this DIV -->  </div>
+        <body>  <div id="video">      <!-- Plotly chart will be drawn inside this DIV -->  </div>
         <div id="print_div"></div>  
         <tr style="text-align: center"><td><canvas id="image" width="320" height="240" style="border:0px solid #000000;"></canvas></td></tr>
 
